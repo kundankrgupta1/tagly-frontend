@@ -8,12 +8,12 @@ import { SERVER_URI } from "../App"
 const AllPosts = () => {
 	const { token, UserLogout } = useContext(ContextAPI)
 	const [allPost, setAllPost] = useState([])
-	const [isLoadingForAllPosts, setIsLoadingforAllPosts] = useState(false)
-	const [errorForAllPosts, setErrorForAllPosts] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState("")
 	const getPosts = async () => {
-		setIsLoadingforAllPosts(true)
+		setIsLoading(true)
 		if (!token) {
-			setErrorForAllPosts("Please login first!!!")
+			setError("Please login first!!!")
 			return;
 		}
 		try {
@@ -23,20 +23,21 @@ const AllPosts = () => {
 				}
 			})
 			setAllPost(res.data.allPost)
-			setIsLoadingforAllPosts(false)
+			setIsLoading(false)
 		} catch (error) {
+			setIsLoading(false)
 			console.log("error from all post", error)
 			if (error.response.status === 401 && error.response.data.message === "TokenExpiredError: jwt expired") {
-				setErrorForAllPosts("Session expired, please login again!!!")
-				setIsLoadingforAllPosts(false)
+				setError("Session expired, please login again!!!")
+				setIsLoading(false)
+			} else {
+				setError(error.response?.data?.message || "server error!!!")
 			}
 			setTimeout(() => {
 				if (error.response.status === 401 && error.response.data.message === "TokenExpiredError: jwt expired") {
 					UserLogout();
 				}
 			}, 2000)
-			setErrorForAllPosts(error.response?.data?.message || "server error!!!")
-			setIsLoadingforAllPosts(false)
 		}
 	}
 	useEffect(() => {
@@ -45,9 +46,9 @@ const AllPosts = () => {
 
 	return (
 		<>
-			{isLoadingForAllPosts && <div className="flex items-center justify-center h-screen"><Loading text="Loading posts..." /></div>}
-			{errorForAllPosts && <p>error</p>}
-			{!isLoadingForAllPosts && !errorForAllPosts && (
+			{isLoading && <div className="flex items-center justify-center h-screen"><Loading text="Loading posts..." /></div>}
+			{error && <p>{error}</p>}
+			{!isLoading && !error && (
 				<>
 					{allPost?.length > 0 ? (
 						allPost

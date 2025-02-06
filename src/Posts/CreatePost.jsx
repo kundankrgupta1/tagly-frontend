@@ -10,7 +10,7 @@ import Loading from "../Components/Loading";
 
 const CreatePost = () => {
 	const navigate = useNavigate();
-	const { token, getPosts } = useContext(ContextAPI);
+	const { token } = useContext(ContextAPI);
 	const [caption, setCaption] = useState("");
 	const [location, setLocation] = useState("");
 	const [image, setImage] = useState(null);
@@ -38,7 +38,6 @@ const CreatePost = () => {
 				setTimeout(() => {
 					setMessage(null);
 					navigate("/");
-					getPosts()
 				}, 2000);
 			} else {
 				setMessage("Please fill in all fields");
