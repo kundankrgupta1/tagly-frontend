@@ -26,6 +26,8 @@ const Login = () => {
 		if (!otpSent) {
 			try {
 				const res = await axios.post(`${SERVER_URI}/login`, { email, password });
+				console.log(res.data);
+
 				if (res.data.success) {
 					setIsLoading(false);
 					setMessage(res.data.message);
@@ -39,8 +41,13 @@ const Login = () => {
 					}
 				}, 2000);
 			} catch (error) {
+				console.log(error)
 				setIsLoading(false);
-				setError(error.response.data.message);
+				if (error.message === "Network Error") {
+					setError(error.message)
+				} else {
+					setError(error.response.data.message);
+				}
 				setPopup(true);
 				setTimeout(() => {
 					setPopup(false);
@@ -50,13 +57,13 @@ const Login = () => {
 		} else {
 			try {
 				const res = await axios.post(`${SERVER_URI}/otp`, { email, otp });
-				if(res.data.loginRequired){
+				if (res.data.loginRequired) {
 					setIsLoading(false);
 					setMessage(res.data.message);
 					setPopup(true);
 				}
 				setTimeout(() => {
-					if(res.data.loginRequired){
+					if (res.data.loginRequired) {
 						setMessage("");
 						setPopup(false);
 						setOtpSent(false);
