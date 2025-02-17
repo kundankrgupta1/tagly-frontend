@@ -86,7 +86,7 @@ const SinglePost = ({ userId, caption, image, location, createdAt }) => {
 				{visibleButton &&
 					<button
 						type="submit"
-						className="font-semibold text-xs text-blue-800 hover:text-black"
+						className="font-semibold text-xs text-blue-800 hover:text-black hover:bg-white px-1 rounded-sm"
 					>
 						Post
 					</button>

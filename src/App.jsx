@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { BiSolidError } from "react-icons/bi";
 import Loading from "./Components/Loading";
 export const SERVER_URI = "http://localhost:3000";
+// export const SERVER_URI = "https://tagly-backend.onrender.com";
 
 const App = () => {
 	const location = useLocation();
@@ -42,12 +43,13 @@ const App = () => {
 		<div>
 			{serverRunning ?
 				<div className="max-w-[1000px] m-auto montserrat">
-					{!hideComponents && <Navbar />}
-					<AllRoutes />
+					{isLoading && <Loading pageLoading={true} />}
+					{!isLoading && !hideComponents && <Navbar />}
+					{!isLoading && <AllRoutes />}
 				</div>
 				:
 				<div>
-					{isLoading && <Loading />}
+					{isLoading && <Loading pageLoading={true} />}
 					{!isLoading &&
 						<div className="flex items-center justify-center h-screen gap-4 montserrat">
 							<BiSolidError size={"4rem"} className="text-red-600" />
